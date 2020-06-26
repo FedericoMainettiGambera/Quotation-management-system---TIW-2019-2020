@@ -3,13 +3,14 @@ package it.polimi.tiw.quotationsmenagment.beans;
 import java.util.ArrayList;
 
 public class Quotation {
-	private float price;
+	private float price; //negative price means no price
+	private String emplyeeUsername;
 	private String clientUsername;
 	private Product product;
 	private ArrayList<Option> options;
 	
 	public Quotation() {
-		//set attributes with setter
+		this.price = -1;
 	}
 	
 	public Quotation( String productName, byte[] img, float price, String clientUsername ) {
@@ -48,8 +49,14 @@ public class Quotation {
 	public Product getProduct() {
 		return product;
 	}
-
 	public void setProduct(Product product) {
 		this.product = product;
+	}
+
+	public String getEmplyeeUsername() {
+		return emplyeeUsername;
+	}
+	public void setEmplyeeUsername(String emplyeeUsername) {
+		this.emplyeeUsername = emplyeeUsername;
 	}
 }
