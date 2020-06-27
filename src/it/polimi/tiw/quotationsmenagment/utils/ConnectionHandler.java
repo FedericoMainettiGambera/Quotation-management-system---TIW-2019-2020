@@ -19,6 +19,7 @@ public class ConnectionHandler {
 			String password = context.getInitParameter("dbPassword");
 			Class.forName(driver);
 			connection = DriverManager.getConnection(url, user, password);
+			System.out.println("Database connection created:\n Url: " + url + "\n User: " + user + "\n Password: " + password);
 		} catch (ClassNotFoundException e) {
 			throw new UnavailableException("Can't load database driver");
 		} catch (SQLException e) {

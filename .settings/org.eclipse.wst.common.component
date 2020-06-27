@@ -6,7 +6,7 @@
                 
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
                 
-        <property name="context-root" value="Esercizio_2_-_gestione_preventivi_-_TIW_2019-2020"/>
+        <property name="context-root" value="quotationMenagementTIW2019-2020"/>
                 
         <property name="java-output-path" value="/quotationMenagementTIW2019-2020/build/classes"/>
             

@@ -1,4 +1,4 @@
-package it.polimi.tiw.quotationsmenagment.controlles;
+package it.polimi.tiw.quotationsmenagment.controllers;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
