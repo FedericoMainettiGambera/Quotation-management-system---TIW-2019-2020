@@ -14,7 +14,7 @@ public class ClientDAO {
 		this.connection = connection;
 	}
 	
-	public Client findByID(int clientID) {
+	public Client findByID(int clientID) throws SQLException {
 		Client clientBean = new Client();
 		
 		String query = "SELECT * FROM db_quotation_management.client WHERE ID = ?;";
@@ -25,15 +25,27 @@ public class ClientDAO {
 				if (result.next()) {
 					clientBean.setUsername(result.getString("username"));
 				}
-			} catch (SQLException e) {
-				// TODO
-				e.printStackTrace();
-			}
-		} catch (SQLException e) {
-			// TODO
-			e.printStackTrace();
+			} 
 		}
 	
 		return clientBean;
+	}
+	
+	public boolean checkCredentials(String username, String password) throws SQLException {
+		boolean validCredentials = false;
+		
+		String query = "SELECT * FROM db_quotation_management.client WHERE username = '?' AND password = '?';";
+		
+		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
+			pstatement.setString(1, username);
+			pstatement.setString(2, password);
+			try (ResultSet result = pstatement.executeQuery();) {
+				if (result.next()) {
+					validCredentials = true;
+				}
+			}
+		} 
+	
+		return validCredentials;
 	}
 }

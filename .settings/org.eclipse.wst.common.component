@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
-    <wb-module deploy-name="Esercizio 2 - gestione preventivi - TIW 2019-2020">
+        
+    <wb-module deploy-name="quotationMenagementTIW2019-2020">
+                
         <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
+                
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
+                
         <property name="context-root" value="Esercizio_2_-_gestione_preventivi_-_TIW_2019-2020"/>
-        <property name="java-output-path" value="/Esercizio 2 - gestione preventivi - TIW 2019-2020/build/classes"/>
+                
+        <property name="java-output-path" value="/quotationMenagementTIW2019-2020/build/classes"/>
+            
     </wb-module>
+    
 </project-modules>
