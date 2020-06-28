@@ -2,7 +2,6 @@ package it.polimi.tiw.quotationsmenagment.beans;
 
 public class User {
 	private String username;
-	private String password;
 	private int ID;
 	private boolean isClient;
 	
@@ -14,13 +13,7 @@ public class User {
 		this.username = username;
 	}
 	
-	public User(String username, String password) {
-		this.password = password;
-		this.username = username;
-	}
-	
-	public User(String username, String password, int ID) {
-		this.password = password;
+	public User(String username, int ID) {
 		this.username = username;
 		this.ID = ID;
 	}
@@ -30,14 +23,6 @@ public class User {
 	}
 	public void setUsername(String username) {
 		this.username = username;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
 	}
 
 	public int getID() {

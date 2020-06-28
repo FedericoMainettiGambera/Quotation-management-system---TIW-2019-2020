@@ -39,46 +39,49 @@ public class CheckLogin extends HttpServlet {
 		String pwd = null;
 		usrn = StringEscapeUtils.escapeJava(request.getParameter("username"));
 		pwd = StringEscapeUtils.escapeJava(request.getParameter("password"));
-		System.out.println("do post started. username: "  + usrn + "; password: " + pwd);
+		System.out.println("CheckLogin.doPost() started, parameters are\n username: "  + usrn + "\n password: " + pwd);
 		if (usrn == null || pwd == null || usrn.isEmpty() || pwd.isEmpty() ) {
+			//TODO
 			response.sendError(505, "Incorrect credentials");
 			return;
 		}
-		
+		System.out.println("Checking if is Client...");
 		ClientDAO clientDAO = new ClientDAO(connection);
 		User userBean;
 		try {
 			userBean = clientDAO.checkCredentials(usrn, pwd);
 		} catch (SQLException e) {
+			//TODO
 			response.sendError(505, "Internal server error");
 			return;
 		}
 		
 		if (userBean != null) { //CLIENT FOUND
 			System.out.println("Correct credentials: CLIENT LOGGED IN");
-			//TODO save all data from userBean and create a session
+			request.getSession().setAttribute("user", userBean);
 			String path = "/quotationMenagementTIW2019-2020/GoToClientHomePage"; //TODO should move project root to Tomcat root
 			response.sendRedirect(path);
 		} 
 		else {
 			System.out.println("Incorrect credentials: NOT A CLIENT");
-			System.out.println("checking employee username and password");
-			
+			System.out.println("Checking if is Employee...");
 			EmployeeDAO employeeDAO = new EmployeeDAO(connection);
 			try {
 				userBean = employeeDAO.checkCredentials(usrn, pwd);
 			} catch (SQLException e) {
+				//TODO
 				response.sendError(505, "Internal server error");
 				return;
 			}
 			
 			if (userBean != null) { //EMPLOYEE FOUND
 				System.out.println("Correct credentials: EMPLOYEE LOGGED IN");
-				//TODO save all data from userBean and create a session
+				request.getSession(true).setAttribute("user", userBean);
 				String path = "/quotationMenagementTIW2019-2020/GoToEmployeeHomePage"; //TODO should move project root to Tomcat root
 				response.sendRedirect(path);
 			}
 			else {
+				//TODO
 				response.sendError(505, "Incorrect credentials: NOT AN EMPLOYEE");
 			}
 		}

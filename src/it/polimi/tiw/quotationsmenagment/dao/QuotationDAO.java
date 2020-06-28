@@ -43,7 +43,6 @@ public class QuotationDAO {
 			try (ResultSet result = pstatement.executeQuery();) {
 				
 				Quotation quotationBean;
-				ArrayList<Option> options;
 				
 				//parsing the result
 				while (result.next()) { //loops on all the different quotations made by the client
@@ -61,7 +60,7 @@ public class QuotationDAO {
 							result.getBytes("image")
 							));
 					//options selected for the product
-					quotationBean.setOptions(this.getOptionsSelected(result.getInt("quotationID")));
+					quotationBean.getProduct().setOptions(this.getOptionsSelected(result.getInt("quotationID")));
 					
 					quotations.add(quotationBean);
 				}
@@ -161,7 +160,9 @@ public class QuotationDAO {
 				"			ON Q.clientID = C.ID " + 
 				"        INNER JOIN db_quotation_management.product P " + 
 				"			ON Q.productID = P.ID " + 
-				"		INNER JOIN (db_quotation_management.management M INNER JOIN db_quotation_management.employee E ON M.employeeID = E.ID) " + 
+				"		INNER JOIN (db_quotation_management.management M "
+				+ "                        INNER JOIN db_quotation_management.employee E "
+				+ "                               ON M.employeeID = E.ID) " + 
 				"			ON Q.ID = M.quotationID " + 
 				"		WHERE E.ID = ?;";
 		
@@ -173,7 +174,6 @@ public class QuotationDAO {
 			try (ResultSet result = pstatement.executeQuery();) {
 				
 				Quotation quotationBean;
-				ArrayList<Option> options;
 				
 				//parsing the result
 				while (result.next()) { //loops on all the different quotations managed by the employee
@@ -190,7 +190,7 @@ public class QuotationDAO {
 							result.getBytes("image")
 							));
 					//options selected for the product
-					quotationBean.setOptions(this.getOptionsSelected(result.getInt("quotationID")));
+					quotationBean.getProduct().setOptions(this.getOptionsSelected(result.getInt("quotationID")));
 					
 					quotations.add(quotationBean);
 					
@@ -329,6 +329,7 @@ public class QuotationDAO {
 		//extract all quotations where price is NULL
 		String query = "SELECT" + 
 				"	Q.ID, " +
+				"   Q.price, " +
 				"	C.username AS clientusername, " + 
 				"	P.name AS productname, " + 
 				"	P.image " + 
@@ -340,7 +341,7 @@ public class QuotationDAO {
 				"		WHERE Q.price IS NULL; ";
 		
 		// Query result structure:
-		// ID | clientusername | productname | image
+		// ID | price | clientusername | productname | image
 				
 		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
 			try (ResultSet result = pstatement.executeQuery();) {
@@ -350,17 +351,15 @@ public class QuotationDAO {
 				//parsing the result
 				while (result.next()) { //loops on all the quotations where price is NULL
 					quotationBean = new Quotation();
-					//price
-					quotationBean.setPrice(result.getInt("price"));
 					//client username
-					quotationBean.setClientUsername(result.getString("username"));
+					quotationBean.setClientUsername(result.getString("clientusername"));
 					//product selected
 					quotationBean.setProduct(new Product(
 							result.getString("productname"),
 							result.getBytes("image")
 							));
 										
-					quotationBean.setOptions(this.getOptionsSelected(result.getInt("ID")));
+					quotationBean.getProduct().setOptions(this.getOptionsSelected(result.getInt("ID")));
 					
 					quotations.add(quotationBean);
 				}
@@ -408,7 +407,7 @@ public class QuotationDAO {
 							result.getBytes("image")
 							));
 										
-					quotation.setOptions(this.getOptionsSelected(quotationID));
+					quotation.getProduct().setOptions(this.getOptionsSelected(quotationID));
 				}
 			}
 		}

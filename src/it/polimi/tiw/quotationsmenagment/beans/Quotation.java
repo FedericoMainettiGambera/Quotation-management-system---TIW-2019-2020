@@ -1,13 +1,10 @@
 package it.polimi.tiw.quotationsmenagment.beans;
 
-import java.util.ArrayList;
-
 public class Quotation {
 	private int price; //negative price means no price
 	private String emplyeeUsername;
 	private String clientUsername;
 	private Product product;
-	private ArrayList<Option> options;
 	
 	public Quotation() {
 		this.price = -1;
@@ -37,13 +34,6 @@ public class Quotation {
 	}
 	public String getClientUsername() {
 		return this.clientUsername;
-	}
-	
-	public void setOptions(ArrayList<Option> options) {
-		this.options = options;
-	}
-	public ArrayList<Option> getOptions() {
-		return this.options;
 	}
 
 	public Product getProduct() {
