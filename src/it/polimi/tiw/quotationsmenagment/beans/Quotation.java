@@ -2,7 +2,7 @@ package it.polimi.tiw.quotationsmenagment.beans;
 
 public class Quotation {
 	private int price; //negative price means no price
-	private String emplyeeUsername;
+	private String employeeUsername;
 	private String clientUsername;
 	private Product product;
 	
@@ -43,10 +43,11 @@ public class Quotation {
 		this.product = product;
 	}
 
-	public String getEmplyeeUsername() {
-		return emplyeeUsername;
+	public String getEmployeeUsername() {
+		return employeeUsername;
 	}
-	public void setEmplyeeUsername(String emplyeeUsername) {
-		this.emplyeeUsername = emplyeeUsername;
+
+	public void setEmployeeUsername(String employeeUsername) {
+		this.employeeUsername = employeeUsername;
 	}
 }

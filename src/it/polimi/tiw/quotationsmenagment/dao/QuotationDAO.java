@@ -167,7 +167,7 @@ public class QuotationDAO {
 				"		WHERE E.ID = ?;";
 		
 		// Query result structure:
-		// quotationID | emplyeeusername | price | clientusername | productname | image 
+		// quotationID | employeeusername | price | clientusername | productname | image 
 		
 		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
 			pstatement.setInt(1, emplyeeID);
@@ -179,11 +179,11 @@ public class QuotationDAO {
 				while (result.next()) { //loops on all the different quotations managed by the employee
 					quotationBean = new Quotation();
 					//employee username
-					quotationBean.setEmplyeeUsername(result.getString("emplyeeusername"));
+					quotationBean.setEmployeeUsername(result.getString("employeeusername"));
 					//price
 					quotationBean.setPrice(result.getInt("price"));
 					//client username
-					quotationBean.setClientUsername(result.getString("username"));
+					quotationBean.setClientUsername(result.getString("clientusername"));
 					//product selected
 					quotationBean.setProduct(new Product(
 							result.getString("productname"),

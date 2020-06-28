@@ -37,7 +37,7 @@ public class GoToEmployeeHomePage extends HttpServlet {
 		ArrayList<Quotation> employeeQuotations;
 		try {
 			employeeQuotations = quotationDAO.findAllByEmplyeeID(((User)request.getSession().getAttribute("user")).getID());
-			request.setAttribute("notManagedQuotations", employeeQuotations);
+			request.setAttribute("employeeQuotations", employeeQuotations);
 		} catch (SQLException e) {
 			//TODO
 			e.printStackTrace();
@@ -54,6 +54,39 @@ public class GoToEmployeeHomePage extends HttpServlet {
 			response.sendError(505, "Can't find not managed quotations");
 			return;
 		}		
+		
+		System.out.println("Retrived data from DB...");
+		if(!employeeQuotations.isEmpty()) {
+			System.out.println(" employeeQuotations:");
+			for(int i = 0; i < employeeQuotations.size(); i++) {
+				System.out.println("  Quotation " + i + ":\n" 
+						+ "   clientName: " + employeeQuotations.get(i).getClientUsername() + "\n"
+						+ "   price: " + employeeQuotations.get(i).getPrice() + "\n "
+						+ "   product name: " + employeeQuotations.get(i).getProduct().getName());
+				for(int j = 0; j< employeeQuotations.get(i).getProduct().getOptions().size(); j++) {
+					System.out.println("   option " + j + ": " + employeeQuotations.get(i).getProduct().getOptions().get(j).getName() 
+							+ ", " + employeeQuotations.get(i).getProduct().getOptions().get(j).getType());
+				}
+			}
+		}
+		else {
+			System.out.println(" NO employeeQuotations found");
+		}
+		if(!notManagedQuotations.isEmpty()) {
+			System.out.println(" notManagedQuotations:");
+			for(int i = 0; i < notManagedQuotations.size(); i++) {
+				System.out.println( "  Quotation " + i + ":\n" 
+						+ "   clientName: " + notManagedQuotations.get(i).getClientUsername() + "\n"
+						+ "   product name: " + notManagedQuotations.get(i).getProduct().getName());
+				for(int j = 0; j< notManagedQuotations.get(i).getProduct().getOptions().size(); j++) {
+					System.out.println("   option " + j + ": " + notManagedQuotations.get(i).getProduct().getOptions().get(j).getName() 
+							+ ", " + notManagedQuotations.get(i).getProduct().getOptions().get(j).getType());
+				}
+			}
+		}
+		else {
+			System.out.println(" No notmanagedQuotations found");
+		}
 		
 		String path = "/EmployeeHome.jsp";
 		RequestDispatcher dispatcher = request.getRequestDispatcher(path);
