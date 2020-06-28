@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringEscapeUtils;
 
 import it.polimi.tiw.quotationsmenagment.utils.ConnectionHandler;
+import it.polimi.tiw.quotationsmenagment.beans.User;
 import it.polimi.tiw.quotationsmenagment.dao.ClientDAO;
 import it.polimi.tiw.quotationsmenagment.dao.EmployeeDAO;
 
@@ -44,34 +46,37 @@ public class CheckLogin extends HttpServlet {
 		}
 		
 		ClientDAO clientDAO = new ClientDAO(connection);
-		boolean validClientCredentials = false;
+		User userBean;
 		try {
-			validClientCredentials = clientDAO.checkCredentials(usrn, pwd);
+			userBean = clientDAO.checkCredentials(usrn, pwd);
 		} catch (SQLException e) {
 			response.sendError(505, "Internal server error");
 			return;
 		}
 		
-		if (validClientCredentials) {
+		if (userBean != null) { //CLIENT FOUND
 			System.out.println("Correct credentials: CLIENT LOGGED IN");
+			//TODO save all data from userBean and create a session
+			String path = "/quotationMenagementTIW2019-2020/GoToClientHomePage"; //TODO should move project root to Tomcat root
+			response.sendRedirect(path);
 		} 
 		else {
-
+			System.out.println("Incorrect credentials: NOT A CLIENT");
 			System.out.println("checking employee username and password");
 			
-			System.out.println("Incorrect credentials: NOT A CLIENT");
-			
 			EmployeeDAO employeeDAO = new EmployeeDAO(connection);
-			boolean validEmployeeCredentials = false;
 			try {
-				validEmployeeCredentials = employeeDAO.checkCredentials(usrn, pwd);
+				userBean = employeeDAO.checkCredentials(usrn, pwd);
 			} catch (SQLException e) {
 				response.sendError(505, "Internal server error");
 				return;
 			}
 			
-			if (validEmployeeCredentials) {
+			if (userBean != null) { //EMPLOYEE FOUND
 				System.out.println("Correct credentials: EMPLOYEE LOGGED IN");
+				//TODO save all data from userBean and create a session
+				String path = "/quotationMenagementTIW2019-2020/GoToEmployeeHomePage"; //TODO should move project root to Tomcat root
+				response.sendRedirect(path);
 			}
 			else {
 				response.sendError(505, "Incorrect credentials: NOT AN EMPLOYEE");

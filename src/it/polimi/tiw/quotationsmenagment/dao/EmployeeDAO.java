@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import it.polimi.tiw.quotationsmenagment.beans.User;
+
 public class EmployeeDAO {
 private Connection connection;
 	
@@ -12,21 +14,23 @@ private Connection connection;
 		this.connection = connection;
 	}
 	
-	public boolean checkCredentials(String username, String password) throws SQLException {
-		boolean validCredentials = false;
+	public User checkCredentials(String username, String password) throws SQLException {
+		User userBean = null;
 		
-		String query = "SELECT * FROM db_quotation_management.emplyee WHERE username = '?' AND password = '?';";
+		String query = "SELECT * FROM db_quotation_management.employee WHERE username = ? AND password = ?;";
 		
 		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
 			pstatement.setString(1, username);
 			pstatement.setString(2, password);
 			try (ResultSet result = pstatement.executeQuery();) {
 				if (result.next()) {
-					validCredentials = true;
-				}
+					userBean = new User();
+					userBean.setIsClient(false);
+					userBean.setID(result.getInt("ID"));
+					userBean.setUsername(result.getString("username"));
+				}	
 			}
-		} 
-	
-		return validCredentials;
+		}
+		return userBean;
 	}
 }
