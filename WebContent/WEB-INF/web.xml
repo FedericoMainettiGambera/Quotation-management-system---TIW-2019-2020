@@ -35,6 +35,15 @@
 		<servlet-name>CheckLogin</servlet-name>
 		<url-pattern>/CheckLogin/*</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>PriceQuotation</servlet-name>
+		<servlet-class>it.polimi.tiw.quotationsmenagment.controllers.PriceQuotation</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>PriceQuotation</servlet-name>
+		<url-pattern>/PriceQuotation/*</url-pattern>
+	</servlet-mapping>
 
 	<!-- TODO
 		<welcome-file-list>

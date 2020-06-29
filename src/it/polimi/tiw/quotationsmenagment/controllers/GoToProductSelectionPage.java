@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -12,12 +13,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import it.polimi.tiw.quotationsmenagment.utils.ConnectionHandler;
 
-@WebServlet("/CreateQuotation")
-public class CreateQuotation extends HttpServlet {
+@WebServlet("/GoToProductSelectionPage")
+public class GoToProductSelectionPage extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Connection connection;
 
-    public CreateQuotation() {
+    public GoToProductSelectionPage() {
         super();
     }
 
@@ -25,12 +26,13 @@ public class CreateQuotation extends HttpServlet {
 		connection = ConnectionHandler.getConnection(getServletContext());
 	}
     
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//get product, selected options and usernanme from parameters
-		//Insert in database (check if available option are consistent with selected options)
-		//redirect to client home page:
-		String path = "/quotationMenagementTIW2019-2020/GoToClientHomePage"; //TODO should move project root to Tomcat root
-		response.sendRedirect(path);
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		//fetch all product
+		//set data fetched in request's attribute
+		//forward:
+		String path = "/ProductSelection.jsp";
+		RequestDispatcher dispatcher = request.getRequestDispatcher(path);
+		dispatcher.forward(request, response);
 	}
 
 	public void destroy() {

@@ -43,5 +43,13 @@ public class Product {
 		this.options = options;
 	}
 	
+	public String toString() {
+		String s = "Product: [name: " + this.name + ", image: " + this.image + "]";
+		for (int i = 0; i < this.options.size(); i++) {
+			s += "\n  -";
+			s += this.options.get(i).toString();
+		}
+		return s;
+	}
 	
 }

@@ -27,7 +27,7 @@ public class QuotationDAO {
 				"   Q.price, " + 
 				"	C.username AS clientusername, " + 
 				"	P.name AS productname, " + 
-				"	P.image, " + 
+				"	P.image " + 
 				"		FROM db_quotation_management.quotation Q " + 
 				"		INNER JOIN db_quotation_management.client C " + 
 				"			ON Q.clientID = C.ID " + 
@@ -47,13 +47,15 @@ public class QuotationDAO {
 				//parsing the result
 				while (result.next()) { //loops on all the different quotations made by the client
 					quotationBean = new Quotation();
+					//quotation ID
+					quotationBean.setID(result.getInt("quotationID"));
 					//price
 					int price = result.getInt("price");
 					if(!result.wasNull()) {
 						quotationBean.setPrice(price);
 					}
 					//client username
-					quotationBean.setClientUsername(result.getString("username"));
+					quotationBean.setClientUsername(result.getString("clientusername"));
 					//product selected
 					quotationBean.setProduct(new Product(
 							result.getString("productname"),
@@ -178,6 +180,8 @@ public class QuotationDAO {
 				//parsing the result
 				while (result.next()) { //loops on all the different quotations managed by the employee
 					quotationBean = new Quotation();
+					//quotation ID
+					quotationBean.setID(result.getInt("quotationID"));
 					//employee username
 					quotationBean.setEmployeeUsername(result.getString("employeeusername"));
 					//price
@@ -313,13 +317,31 @@ public class QuotationDAO {
 		return;
 	}
 	
-	public void priceQuote(int quotationID, int price) throws SQLException {
-		String query = "UPDATE `db_quotation_management`.`quotation` SET `price` = '?' WHERE (`ID` = '?');";
-		try (PreparedStatement pstatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);) {
+	public void priceQuote(int quotationID, int price, int employeeID) throws SQLException {
+		//start transaction for database integrity
+		connection.setAutoCommit(false);
+				
+		String query = "UPDATE db_quotation_management.quotation SET price = ? WHERE (ID = ?);";
+		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
 			pstatement.setInt(1, price);
 			pstatement.setInt(2, quotationID);
 			pstatement.executeUpdate();
+			
+			query = "INSERT into db_quotation_management.management (employeeID, quotationID) VALUES (?, ?);";
+			try (PreparedStatement pstatement1 = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);) {
+				pstatement1.setInt(1, employeeID);
+				pstatement1.setInt(2, quotationID);
+				pstatement1.executeUpdate();
+			}
+			connection.commit();
 		} 
+		catch (SQLException e) {
+			connection.rollback();
+			throw e;
+		} 
+		finally {
+			connection.setAutoCommit(true);
+		}
 	}
 	
 	public ArrayList<Quotation> findAllNotManaged() throws SQLException{		
@@ -328,7 +350,7 @@ public class QuotationDAO {
 			
 		//extract all quotations where price is NULL
 		String query = "SELECT" + 
-				"	Q.ID, " +
+				"	Q.ID AS quotationID, " +
 				"   Q.price, " +
 				"	C.username AS clientusername, " + 
 				"	P.name AS productname, " + 
@@ -341,7 +363,7 @@ public class QuotationDAO {
 				"		WHERE Q.price IS NULL; ";
 		
 		// Query result structure:
-		// ID | price | clientusername | productname | image
+		// quotationID | price | clientusername | productname | image
 				
 		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
 			try (ResultSet result = pstatement.executeQuery();) {
@@ -351,6 +373,8 @@ public class QuotationDAO {
 				//parsing the result
 				while (result.next()) { //loops on all the quotations where price is NULL
 					quotationBean = new Quotation();
+					//quotation ID
+					quotationBean.setID(result.getInt("quotationID"));
 					//client username
 					quotationBean.setClientUsername(result.getString("clientusername"));
 					//product selected
@@ -359,7 +383,7 @@ public class QuotationDAO {
 							result.getBytes("image")
 							));
 										
-					quotationBean.getProduct().setOptions(this.getOptionsSelected(result.getInt("ID")));
+					quotationBean.getProduct().setOptions(this.getOptionsSelected(result.getInt("quotationID")));
 					
 					quotations.add(quotationBean);
 				}
@@ -372,7 +396,7 @@ public class QuotationDAO {
 		Quotation quotation = null;
 		
 		String query = "SELECT " + 
-				"	Q.ID AS quoationID, " + 
+				"	Q.ID AS quotationID, " + 
 				"   Q.price, " +
 				"   C.username AS clientusername, " + 
 				"   P.name AS productname, " + 
@@ -387,6 +411,7 @@ public class QuotationDAO {
 		// quotationID | price | clientusername | productname | image
 						
 		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
+			pstatement.setInt(1,quotationID);
 			try (ResultSet result = pstatement.executeQuery();) {
 				
 				pstatement.setInt(1, quotationID);
@@ -394,6 +419,8 @@ public class QuotationDAO {
 				//parsing the result
 				if (result.next()) {
 					quotation = new Quotation();
+					//quotation ID
+					quotation.setID(result.getInt("quotationID"));
 					//price
 					int price = result.getInt("price");
 					if(!result.wasNull()) {

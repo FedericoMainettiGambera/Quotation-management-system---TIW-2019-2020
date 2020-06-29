@@ -26,4 +26,8 @@ public class Option {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	public String toString() {
+		return "Option: [name: " + this.name + ", type: " + this.type + "]";
+	}
 }

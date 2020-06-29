@@ -44,4 +44,8 @@ public class User {
 	public void setIsClient(boolean isClient) {
 		this.isClient = isClient;
 	}
+	
+	public String toString() {
+		return "USER: [ID: " + this.ID + ", username: " + this.username +", isClient: " + this.isClient + "]";
+	}
 }

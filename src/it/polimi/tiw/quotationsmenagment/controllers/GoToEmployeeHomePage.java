@@ -31,17 +31,16 @@ public class GoToEmployeeHomePage extends HttpServlet {
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("GoToEmployeeHomePage.doGet() just started");
-		
+		System.out.println("GoToEmployeeHomePage.doGet() just started.");
+		System.out.println("Retriving data from DB.");
 		QuotationDAO quotationDAO = new QuotationDAO(connection);
 		ArrayList<Quotation> employeeQuotations;
 		try {
 			employeeQuotations = quotationDAO.findAllByEmplyeeID(((User)request.getSession().getAttribute("user")).getID());
 			request.setAttribute("employeeQuotations", employeeQuotations);
 		} catch (SQLException e) {
-			//TODO
 			e.printStackTrace();
-			response.sendError(505, "Can't find Employee's quotations");
+			response.sendError(505, "Internal server error");
 			return;
 		}
 		ArrayList<Quotation> notManagedQuotations;
@@ -49,44 +48,32 @@ public class GoToEmployeeHomePage extends HttpServlet {
 			notManagedQuotations = quotationDAO.findAllNotManaged();
 			request.setAttribute("notManagedQuotations", notManagedQuotations);
 		} catch (SQLException e) {
-			//TODO
 			e.printStackTrace();
-			response.sendError(505, "Can't find not managed quotations");
+			response.sendError(505, "Internal server error");
 			return;
 		}		
 		
-		System.out.println("Retrived data from DB...");
+		System.out.println("Stored data in request:");
 		if(!employeeQuotations.isEmpty()) {
-			System.out.println(" employeeQuotations:");
-			for(int i = 0; i < employeeQuotations.size(); i++) {
-				System.out.println("  Quotation " + i + ":\n" 
-						+ "   clientName: " + employeeQuotations.get(i).getClientUsername() + "\n"
-						+ "   price: " + employeeQuotations.get(i).getPrice() + "\n "
-						+ "   product name: " + employeeQuotations.get(i).getProduct().getName());
-				for(int j = 0; j< employeeQuotations.get(i).getProduct().getOptions().size(); j++) {
-					System.out.println("   option " + j + ": " + employeeQuotations.get(i).getProduct().getOptions().get(j).getName() 
-							+ ", " + employeeQuotations.get(i).getProduct().getOptions().get(j).getType());
-				}
+			System.out.println("1) employeeQuotations:");
+			for(int i = 0; i< employeeQuotations.size(); i++) {
+				System.out.println(employeeQuotations.get(i).toString());
 			}
 		}
 		else {
-			System.out.println(" NO employeeQuotations found");
+			System.out.println("1) employeeQuotations: EMPTY");
 		}
 		if(!notManagedQuotations.isEmpty()) {
-			System.out.println(" notManagedQuotations:");
-			for(int i = 0; i < notManagedQuotations.size(); i++) {
-				System.out.println( "  Quotation " + i + ":\n" 
-						+ "   clientName: " + notManagedQuotations.get(i).getClientUsername() + "\n"
-						+ "   product name: " + notManagedQuotations.get(i).getProduct().getName());
-				for(int j = 0; j< notManagedQuotations.get(i).getProduct().getOptions().size(); j++) {
-					System.out.println("   option " + j + ": " + notManagedQuotations.get(i).getProduct().getOptions().get(j).getName() 
-							+ ", " + notManagedQuotations.get(i).getProduct().getOptions().get(j).getType());
-				}
+			System.out.println("2) notManagedQuotations:");
+			for(int i = 0; i< notManagedQuotations.size(); i++) {
+				System.out.println(notManagedQuotations.get(i).toString());
 			}
 		}
 		else {
-			System.out.println(" No notmanagedQuotations found");
+			System.out.println("2) notManagedQuotations: EMPTY");
 		}
+		
+		System.out.println("Forwarding to EmployeeHome.jsp");
 		
 		String path = "/EmployeeHome.jsp";
 		RequestDispatcher dispatcher = request.getRequestDispatcher(path);

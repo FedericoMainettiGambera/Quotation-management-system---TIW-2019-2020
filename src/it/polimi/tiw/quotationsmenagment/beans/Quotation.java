@@ -1,6 +1,7 @@
 package it.polimi.tiw.quotationsmenagment.beans;
 
 public class Quotation {
+	private int ID;
 	private int price; //negative price means no price
 	private String employeeUsername;
 	private String clientUsername;
@@ -49,5 +50,18 @@ public class Quotation {
 
 	public void setEmployeeUsername(String employeeUsername) {
 		this.employeeUsername = employeeUsername;
+	}
+
+	public int getID() {
+		return ID;
+	}
+
+	public void setID(int iD) {
+		ID = iD;
+	}
+	
+	public String toString() {
+		return "Quotation: [ID: " + this.ID + ", clientUsername: " + this.clientUsername + ", employeeUsername:" 
+									  + this.employeeUsername + ", price: " + this.price + "]\n -" + this.product.toString();
 	}
 }
