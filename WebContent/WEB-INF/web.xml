@@ -44,6 +44,15 @@
 		<servlet-name>PriceQuotation</servlet-name>
 		<url-pattern>/PriceQuotation/*</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>CreateQuotation</servlet-name>
+		<servlet-class>it.polimi.tiw.quotationsmenagment.controllers.CreateQuotation</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>CreateQuotation</servlet-name>
+		<url-pattern>/CreateQuotation/*</url-pattern>
+	</servlet-mapping>
 
 	<!-- TODO
 		<welcome-file-list>

@@ -1,6 +1,7 @@
 package it.polimi.tiw.quotationsmenagment.beans;
 
 public class Option {
+	private int ID;
 	private String type;
 	private String name;
 	
@@ -26,8 +27,16 @@ public class Option {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+	public int getID() {
+		return ID;
+	}
+
+	public void setID(int iD) {
+		ID = iD;
+	}
 	
 	public String toString() {
-		return "Option: [name: " + this.name + ", type: " + this.type + "]";
+		return "Option: [ID: " + this.ID + ", name: " + this.name + ", type: " + this.type + "]";
 	}
 }

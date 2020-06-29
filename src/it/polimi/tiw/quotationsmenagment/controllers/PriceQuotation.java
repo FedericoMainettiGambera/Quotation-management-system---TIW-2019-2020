@@ -63,7 +63,7 @@ public class PriceQuotation extends HttpServlet {
 		int price = (int) (fPrice * 100);
 		try {
 			System.out.println("Setting price " + price + " (in cents) for quotation: \n" + quotation.toString() );
-			quotationDAO.priceQuote(quotationID, price, ((User)request.getSession().getAttribute("user")).getID());
+			quotationDAO.priceQuotation(quotationID, price, ((User)request.getSession().getAttribute("user")).getID());
 		} catch (SQLException e) {
 			e.printStackTrace();
 			response.sendError(505, "Internal server Error");

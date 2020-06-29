@@ -286,7 +286,7 @@ public class QuotationDAO {
 		*/
 	}
 	
-	public void createQuote(int productID, int clientID, int[] optionsID ) throws SQLException {
+	public void createQuotation(int productID, int clientID, ArrayList<Integer> optionsID ) throws SQLException {
 		//start transaction for database integrity
 		connection.setAutoCommit(false);
 		
@@ -299,8 +299,8 @@ public class QuotationDAO {
 			
 			query = "INSERT into db_quotation_management.selectedoption (optionID, quotationID) VALUES (?, LAST_INSERT_ID());";
 			try (PreparedStatement pstatement1 = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);) {
-				for(int i = 0; i < optionsID.length; i++) {
-					pstatement1.setInt(1, optionsID[i]);
+				for(int i = 0; i < optionsID.size(); i++) {
+					pstatement1.setInt(1, optionsID.get(i));
 					pstatement1.executeUpdate();
 				}
 			}
@@ -317,7 +317,7 @@ public class QuotationDAO {
 		return;
 	}
 	
-	public void priceQuote(int quotationID, int price, int employeeID) throws SQLException {
+	public void priceQuotation(int quotationID, int price, int employeeID) throws SQLException {
 		//start transaction for database integrity
 		connection.setAutoCommit(false);
 				

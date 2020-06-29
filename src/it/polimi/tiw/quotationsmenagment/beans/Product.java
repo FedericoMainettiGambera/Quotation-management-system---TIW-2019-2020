@@ -3,6 +3,7 @@ package it.polimi.tiw.quotationsmenagment.beans;
 import java.util.ArrayList;
 
 public class Product {
+	private int ID;
 	private String name;
 	private byte[] image;
 	private ArrayList<Option> options;
@@ -42,14 +43,26 @@ public class Product {
 	public void setOptions(ArrayList<Option> options) {
 		this.options = options;
 	}
+
+	public int getID() {
+		return ID;
+	}
+
+	public void setID(int iD) {
+		ID = iD;
+	}
 	
 	public String toString() {
-		String s = "Product: [name: " + this.name + ", image: " + this.image + "]";
-		for (int i = 0; i < this.options.size(); i++) {
-			s += "\n  -";
-			s += this.options.get(i).toString();
+		String s = "Product: [ID: " + this.ID + ", name: " + this.name + ", image: " + this.image + "]";
+		if(this.options == null) {
+			s+= "\n  NO OPTIONS";
+		}
+		else {
+			for (int i = 0; i < this.options.size(); i++) {
+				s += "\n  -";
+				s += this.options.get(i).toString();
+			}
 		}
 		return s;
 	}
-	
 }
