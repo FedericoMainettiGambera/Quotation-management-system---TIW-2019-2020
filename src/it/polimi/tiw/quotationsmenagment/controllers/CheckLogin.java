@@ -10,7 +10,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringEscapeUtils;
 
@@ -45,7 +44,7 @@ public class CheckLogin extends HttpServlet {
 			response.sendError(505, "Incorrect credentials");
 			return;
 		}
-		System.out.println("Parameters are\n username: "  + usrn + "\n password: " + pwd +".");
+		System.out.println("Parameter username is "  + usrn + " and parameter password is " + pwd +".");
 		System.out.println("Checking if parameters match a Client form DB.");
 		ClientDAO clientDAO = new ClientDAO(connection);
 		User userBean;
@@ -86,8 +85,10 @@ public class CheckLogin extends HttpServlet {
 				response.sendRedirect(path);
 			}
 			else {
-				//TODO
-				response.sendError(505, "Incorrect credentials: NOT AN EMPLOYEE");
+				System.out.println("Incorrect credentials: NOT AN EMPLOYEE.");
+				System.out.println("Redirecting to GoToLoginPage.");
+				String path = "/quotationMenagementTIW2019-2020/GoToLoginPage"; //TODO should move project root to Tomcat root
+				response.sendRedirect(path);
 			}
 		}
 	}

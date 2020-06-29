@@ -10,12 +10,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.StringEscapeUtils;
-
 import it.polimi.tiw.quotationsmenagment.beans.Quotation;
 import it.polimi.tiw.quotationsmenagment.beans.User;
 import it.polimi.tiw.quotationsmenagment.dao.QuotationDAO;
 import it.polimi.tiw.quotationsmenagment.utils.ConnectionHandler;
+import it.polimi.tiw.quotationsmenagment.utils.Money;
 
 @WebServlet("/PriceQuotation")
 public class PriceQuotation extends HttpServlet {
@@ -34,17 +33,29 @@ public class PriceQuotation extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("PriceQuotation.doPost() just started.");
 		
-		String sPrice;
-		String sQuotationID;
-		sPrice = StringEscapeUtils.escapeJava(request.getParameter("price"));
-		sQuotationID = StringEscapeUtils.escapeJava(request.getParameter("quotationID"));
-		if (sPrice == null || sQuotationID == null || sQuotationID.isEmpty() || sPrice.isEmpty() ) {
-			System.out.println("Parameters price or quotationID are empty or null.");
-			response.sendError(505, "Incorrect price");
+		Integer wholePart;
+		Integer decimalPart;
+		Integer quotationID;
+		try {
+			quotationID = Integer.parseInt(request.getParameter("quotationID"));
+			System.out.println(request.getParameter("wholePart"));
+			System.out.println(request.getParameter("decimalPart"));			
+			wholePart = Integer.parseInt(request.getParameter("wholePart"));
+			decimalPart = Integer.parseInt(request.getParameter("decimalPart"));
+		}
+		catch (NumberFormatException | NullPointerException e){
+			e.printStackTrace();
+			response.sendError(505, "Invalid parameters");
 			return;
 		}
-		System.out.println("Parameter \"price\" is "  + sPrice + " and parameter \"quotationID\" is " + sQuotationID);
-		int quotationID = Integer.parseInt(sQuotationID);
+		if(decimalPart >= 100 || decimalPart < 0 ) {
+			response.sendError(505, "Invalid parameters");
+			return;
+		}
+		
+		Money price = new Money(wholePart,decimalPart);
+		System.out.println("Parameter price (wholePart.decimalPart) is " + price.toString() + " and parameter quotationID is " + quotationID);
+		
 		QuotationDAO quotationDAO = new QuotationDAO(connection);
 		Quotation quotation = null;
 		System.out.println("Retriving data from DB.");
@@ -55,14 +66,13 @@ public class PriceQuotation extends HttpServlet {
 			response.sendError(505, "Internal server Error");
 			return;
 		}
-		if(quotation == null || quotation.getPrice()>=0) {
+		if(quotation == null || quotation.getPrice() != null) {
+			//TODO maybe should redirect to the priceQuotationPage... or to the home.. or to a special error page that leads to the home
 			response.sendError(505, "Incorrect parameters");
 			return;
 		}
-		float fPrice = Float.parseFloat(sPrice);
-		int price = (int) (fPrice * 100);
 		try {
-			System.out.println("Setting price " + price + " (in cents) for quotation: \n" + quotation.toString() );
+			System.out.println("Setting price " + price.toString() + " for quotation: \n" + quotation.toString() );
 			quotationDAO.priceQuotation(quotationID, price, ((User)request.getSession().getAttribute("user")).getID());
 		} catch (SQLException e) {
 			e.printStackTrace();

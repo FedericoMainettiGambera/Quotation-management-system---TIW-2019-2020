@@ -44,7 +44,9 @@ public class CreateQuotation extends HttpServlet {
 		Map<String, String[]> parametersMap = request.getParameterMap();
 		System.out.println("All parameters names are:");
 		parametersMap.forEach((key,value) -> System.out.println("  " + key + ": [array lenght =" + value.length + "] first element is " + value[0])); 
+		
 		ArrayList<Integer> optionsID = new ArrayList<Integer>();
+		
 		for (Map.Entry<String, String[]> entry : parametersMap.entrySet()) {
 		    if(entry.getKey().startsWith("option")) {
 		    	Integer currentOptionSelectedID = null;

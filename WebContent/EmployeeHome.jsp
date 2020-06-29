@@ -18,7 +18,7 @@
 				<c:forEach var="option" items="${managedQuotation.product.options}">
 					[<c:out value="${option.name}" />, <c:out value="${option.type}" />]
 				</c:forEach>
-				Price: <c:out value="${managedQuotation.price}" />
+				Price: <c:out value="${managedQuotation.price.wholePart}" />.<c:out value="${managedQuotation.price.decimalPart}" />
 				[image]
 			</li>
 		</c:forEach>

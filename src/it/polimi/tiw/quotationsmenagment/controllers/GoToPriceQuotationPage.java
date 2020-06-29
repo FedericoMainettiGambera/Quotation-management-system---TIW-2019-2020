@@ -35,10 +35,9 @@ public class GoToPriceQuotationPage extends HttpServlet {
 			quotationID = Integer.parseInt(request.getParameter("quotationID"));
 		} catch (NumberFormatException | NullPointerException e) {
 			e.printStackTrace();
-			response.sendError(505, "Invalid parameters");
+			response.sendError(505, "Invalid parameter");
 			return;
 		}
-		
 		System.out.println("Request's parameter \"quotationID\" is: " + quotationID + ", searching quotation in DB.");
 		QuotationDAO quotationDAO = new QuotationDAO(connection);
 		Quotation quotationBean = null;
@@ -49,7 +48,7 @@ public class GoToPriceQuotationPage extends HttpServlet {
 			response.sendError(505, "Internal Server Error");
 			return;
 		}
-		if(quotationBean == null) {
+		if(quotationBean == null || quotationBean.getPrice() != null) {
 			response.sendError(505, "Invalid parameter");
 			return;
 		}

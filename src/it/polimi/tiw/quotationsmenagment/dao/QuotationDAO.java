@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import it.polimi.tiw.quotationsmenagment.beans.Option;
 import it.polimi.tiw.quotationsmenagment.beans.Product;
 import it.polimi.tiw.quotationsmenagment.beans.Quotation;
+import it.polimi.tiw.quotationsmenagment.utils.Money;
 
 public class QuotationDAO {
 	private Connection connection;
@@ -24,7 +25,8 @@ public class QuotationDAO {
 		
 		String query = "SELECT " +
 				"   Q.ID AS quotationID, " +
-				"   Q.price, " + 
+				"   Q.wholePart, " +
+				"   Q.decimalPart, " +
 				"	C.username AS clientusername, " + 
 				"	P.name AS productname, " + 
 				"	P.image " + 
@@ -36,7 +38,7 @@ public class QuotationDAO {
 				"		WHERE Q.clientID = ?; ";
 		
 		// Query result structure:
-		// quotationID | price | clientusername | productname | image 
+		// quotationID | wholePart | decimalPart | clientusername | productname | image 
 		
 		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
 			pstatement.setInt(1, clientID);
@@ -50,7 +52,7 @@ public class QuotationDAO {
 					//quotation ID
 					quotationBean.setID(result.getInt("quotationID"));
 					//price
-					int price = result.getInt("price");
+					Money price = new Money (result.getInt("wholePart"), result.getInt("decimalPart"));
 					if(!result.wasNull()) {
 						quotationBean.setPrice(price);
 					}
@@ -152,7 +154,8 @@ public class QuotationDAO {
 		
 		String query = "SELECT" + 
 				"	Q.ID AS quotationID, " + 
-				"	Q.price, " + 
+				"	Q.wholePart, " +
+				"   Q.decimalPart, " +
 				"	C.username AS clientusername, " + 
 				"	P.name AS productname, " + 
 				"	P.image, " +  
@@ -169,7 +172,7 @@ public class QuotationDAO {
 				"		WHERE E.ID = ?;";
 		
 		// Query result structure:
-		// quotationID | employeeusername | price | clientusername | productname | image 
+		// quotationID | employeeusername | wholePart | decimalPart | clientusername | productname | image 
 		
 		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
 			pstatement.setInt(1, emplyeeID);
@@ -185,7 +188,7 @@ public class QuotationDAO {
 					//employee username
 					quotationBean.setEmployeeUsername(result.getString("employeeusername"));
 					//price
-					quotationBean.setPrice(result.getInt("price"));
+					quotationBean.setPrice(new Money (result.getInt("wholePart"), result.getInt("decimalPart")));
 					//client username
 					quotationBean.setClientUsername(result.getString("clientusername"));
 					//product selected
@@ -317,14 +320,15 @@ public class QuotationDAO {
 		return;
 	}
 	
-	public void priceQuotation(int quotationID, int price, int employeeID) throws SQLException {
+	public void priceQuotation(int quotationID, Money price, int employeeID) throws SQLException {
 		//start transaction for database integrity
 		connection.setAutoCommit(false);
 				
-		String query = "UPDATE db_quotation_management.quotation SET price = ? WHERE (ID = ?);";
+		String query = "UPDATE db_quotation_management.quotation SET wholePart = ?, decimalPart = ? WHERE (ID = ?);";
 		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
-			pstatement.setInt(1, price);
-			pstatement.setInt(2, quotationID);
+			pstatement.setInt(1, price.getWholePart());
+			pstatement.setInt(2, price.getDecimalPart());
+			pstatement.setInt(3, quotationID);
 			pstatement.executeUpdate();
 			
 			query = "INSERT into db_quotation_management.management (employeeID, quotationID) VALUES (?, ?);";
@@ -351,7 +355,6 @@ public class QuotationDAO {
 		//extract all quotations where price is NULL
 		String query = "SELECT" + 
 				"	Q.ID AS quotationID, " +
-				"   Q.price, " +
 				"	C.username AS clientusername, " + 
 				"	P.name AS productname, " + 
 				"	P.image " + 
@@ -360,10 +363,10 @@ public class QuotationDAO {
 				"			ON Q.clientID = C.ID " + 
 				"		INNER JOIN db_quotation_management.product P" + 
 				"			ON Q.productID = P.ID " + 
-				"		WHERE Q.price IS NULL; ";
+				"		WHERE Q.wholePart IS NULL; ";
 		
 		// Query result structure:
-		// quotationID | price | clientusername | productname | image
+		// quotationID | clientusername | productname | image
 				
 		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
 			try (ResultSet result = pstatement.executeQuery();) {
@@ -397,7 +400,8 @@ public class QuotationDAO {
 		
 		String query = "SELECT " + 
 				"	Q.ID AS quotationID, " + 
-				"   Q.price, " +
+				"   Q.wholePart, " +
+				"   Q.decimalPart, " +
 				"   C.username AS clientusername, " + 
 				"   P.name AS productname, " + 
 				"   P.image " + 
@@ -408,7 +412,7 @@ public class QuotationDAO {
 				"		ON Q.productID = P.ID " + 
 				"	WHERE Q.ID = ?;";
 		// Query result structure:
-		// quotationID | price | clientusername | productname | image
+		// quotationID | wholePart | decimalPart | clientusername | productname | image
 						
 		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
 			pstatement.setInt(1,quotationID);
@@ -422,9 +426,12 @@ public class QuotationDAO {
 					//quotation ID
 					quotation.setID(result.getInt("quotationID"));
 					//price
-					int price = result.getInt("price");
+					Money price = new Money(result.getInt("wholePart"), result.getInt("decimalPart"));
 					if(!result.wasNull()) {
 						quotation.setPrice(price);
+					}
+					else {
+						quotation.setPrice(null);
 					}
 					//client username
 					quotation.setClientUsername(result.getString("clientusername"));

@@ -19,7 +19,7 @@
 				<c:forEach var="option" items="${quotation.product.options}">
 					[<c:out value="${option.name}" />, <c:out value="${option.type}" />]
 				</c:forEach>
-				Price: <c:out value="${quotation.price}" />
+				Price: <c:out value="${quotation.price.wholePart}" />.<c:out value="${quotation.price.decimalPart}" />
 				[image]
 			</li>
 		</c:forEach>

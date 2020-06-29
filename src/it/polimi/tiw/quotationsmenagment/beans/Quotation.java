@@ -1,32 +1,36 @@
 package it.polimi.tiw.quotationsmenagment.beans;
 
+import it.polimi.tiw.quotationsmenagment.utils.Money;
+
 public class Quotation {
 	private int ID;
-	private int price; //negative price means no price
+	//negative price means no price; also price is considered in cents in Java and in DB, 
+	//only in the view is trasformed in a decimal value.
+	private Money price; 
 	private String employeeUsername;
 	private String clientUsername;
 	private Product product;
 	
 	public Quotation() {
-		this.price = -1;
+		this.price = null;
 	}
 	
-	public Quotation( String productName, byte[] img, int price, String clientUsername ) {
+	public Quotation( String productName, byte[] img, Money price, String clientUsername ) {
 		this.setProduct(new Product(productName, img));
 		this.price = price;
 		this.clientUsername = clientUsername;
 	}
 	
-	public Quotation( Product product, int price, String clientUsername) {
+	public Quotation( Product product, Money price, String clientUsername) {
 		this.setProduct(product);
 		this.price = price;
 		this.clientUsername = clientUsername;
 	}
 	
-	public void setPrice(int price) {
+	public void setPrice(Money price) {
 		this.price = price;
 	}
-	public float getPrice() {
+	public Money getPrice() {
 		return this.price;
 	}
 	
@@ -62,6 +66,7 @@ public class Quotation {
 	
 	public String toString() {
 		return "Quotation: [ID: " + this.ID + ", clientUsername: " + this.clientUsername + ", employeeUsername:" 
-									  + this.employeeUsername + ", price: " + this.price + "]\n -" + this.product.toString();
+									  + this.employeeUsername + ", price: " + this.price + "]"
+						+ "\n -" + this.product.toString();
 	}
 }

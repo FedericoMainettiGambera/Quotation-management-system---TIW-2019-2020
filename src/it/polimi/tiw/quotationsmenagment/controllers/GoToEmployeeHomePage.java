@@ -34,24 +34,24 @@ public class GoToEmployeeHomePage extends HttpServlet {
 		System.out.println("GoToEmployeeHomePage.doGet() just started.");
 		System.out.println("Retriving data from DB.");
 		QuotationDAO quotationDAO = new QuotationDAO(connection);
-		ArrayList<Quotation> employeeQuotations;
+		ArrayList<Quotation> employeeQuotations = null;
 		try {
 			employeeQuotations = quotationDAO.findAllByEmplyeeID(((User)request.getSession().getAttribute("user")).getID());
-			request.setAttribute("employeeQuotations", employeeQuotations);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			response.sendError(505, "Internal server error");
 			return;
 		}
+		request.setAttribute("employeeQuotations", employeeQuotations);
 		ArrayList<Quotation> notManagedQuotations;
 		try {
 			notManagedQuotations = quotationDAO.findAllNotManaged();
-			request.setAttribute("notManagedQuotations", notManagedQuotations);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			response.sendError(505, "Internal server error");
 			return;
 		}		
+		request.setAttribute("notManagedQuotations", notManagedQuotations);
 		
 		System.out.println("Stored data in request:");
 		if(!employeeQuotations.isEmpty()) {
@@ -78,10 +78,6 @@ public class GoToEmployeeHomePage extends HttpServlet {
 		String path = "/EmployeeHome.jsp";
 		RequestDispatcher dispatcher = request.getRequestDispatcher(path);
 		dispatcher.forward(request, response);
-	}
-
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		doGet(request, response);
 	}
 
 	public void destroy() {

@@ -48,6 +48,6 @@ public class ClientDAO {
 				}	
 			}
 		}
-		return userBean;
+		return userBean; //might be null
 	}
 }

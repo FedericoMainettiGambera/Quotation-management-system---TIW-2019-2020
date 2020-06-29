@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringEscapeUtils;
+
 import it.polimi.tiw.quotationsmenagment.beans.Option;
 import it.polimi.tiw.quotationsmenagment.dao.ProductDAO;
 import it.polimi.tiw.quotationsmenagment.utils.ConnectionHandler;
@@ -43,7 +45,7 @@ public class GoToOptionSelectionPage extends HttpServlet {
 		}
 		System.out.println("Parameter productSelectedID is: " + productSelectedID);
 		
-		String productSelectedName = request.getParameter("productSelectedName");
+		String productSelectedName = StringEscapeUtils.escapeJava(request.getParameter("productSelectedName"));
 		if(productSelectedName == null || productSelectedName.isEmpty()) {
 			System.out.println("Invalid or missing parameter \"productSelectedName\"");
 			response.sendError(505, "Invalid parameters");
