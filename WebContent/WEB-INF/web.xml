@@ -26,6 +26,34 @@
         <filter-name>LoginChecker</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+	
+	<filter>
+        <filter-name>ClientRoleChecker</filter-name>
+        <filter-class>it.polimi.tiw.quotationsmenagment.filters.ClientRoleChecker</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>ClientRoleChecker</filter-name>
+        <url-pattern>/CreateQuotation</url-pattern>
+        <url-pattern>/GoToClientHomePage</url-pattern>
+        <url-pattern>/GoToOptionSelectionPage</url-pattern>
+        <url-pattern>/GoToProductSelectionPage</url-pattern>
+        <url-pattern>/ClientHome.jsp</url-pattern>
+        <url-pattern>/OptionSelection.jsp</url-pattern>
+        <url-pattern>/ProductSelection.jsp</url-pattern>
+    </filter-mapping>
+
+	<filter>
+        <filter-name>EmployeeRoleChecker</filter-name>
+        <filter-class>it.polimi.tiw.quotationsmenagment.filters.EmployeeRoleChecker</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>EmployeeRoleChecker</filter-name>
+        <url-pattern>/GoToEmployeeHomePage</url-pattern>
+        <url-pattern>/GoToPriceQuotationPage</url-pattern>
+        <url-pattern>/PriceQuotation</url-pattern>
+        <url-pattern>/EmployeeHome.jsp</url-pattern>
+        <url-pattern>/PriceQuotation.jsp</url-pattern>
+    </filter-mapping>
 
 	<servlet>
 		<servlet-name>LoginPage</servlet-name>

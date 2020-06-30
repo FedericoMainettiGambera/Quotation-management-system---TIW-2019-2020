@@ -3,48 +3,37 @@ package it.polimi.tiw.quotationsmenagment.filters;
 import java.io.IOException;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-/**
- * Servlet Filter implementation class EmployeeRoleChecker
- */
+import it.polimi.tiw.quotationsmenagment.beans.User;
+
 @WebFilter("/EmployeeRoleChecker")
 public class EmployeeRoleChecker implements Filter {
 
-    /**
-     * Default constructor. 
-     */
-    public EmployeeRoleChecker() {
-        // TODO Auto-generated constructor stub
-    }
-
-	/**
-	 * @see Filter#destroy()
-	 */
-	public void destroy() {
-		// TODO Auto-generated method stub
+	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
+		System.out.println("EmployeeRoleChecker.doFilter() just started. [must be executed after LoginChecker filter]");
+		
+		HttpServletRequest request = (HttpServletRequest) req;
+		HttpServletResponse response = (HttpServletResponse) res;
+		
+		System.out.println("ServletPath is " + request.getServletPath());
+		
+		if(!((User)request.getSession().getAttribute("user")).isClient()) {
+			System.out.println("User is an employee: acces granted.");
+			chain.doFilter(req, res);
+			return;
+		}
+		else {
+			System.out.println("User is not an employee: acces denied.");
+			System.out.println("Redirecting to ClientHomePage");
+			String path = "/quotationMenagementTIW2019-2020/GoToClientHomePage"; //TODO should move project root to Tomcat root
+			response.sendRedirect(path);
+			return;
+		}
 	}
-
-	/**
-	 * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
-	 */
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-		// TODO Auto-generated method stub
-		// place your code here
-
-		// pass the request along the filter chain
-		chain.doFilter(request, response);
-	}
-
-	/**
-	 * @see Filter#init(FilterConfig)
-	 */
-	public void init(FilterConfig fConfig) throws ServletException {
-		// TODO Auto-generated method stub
-	}
-
 }
