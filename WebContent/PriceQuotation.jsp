@@ -26,7 +26,8 @@
 	<form action="/quotationMenagementTIW2019-2020/PriceQuotation/" method="post">
 		<label >Price</label><br> 
 		<input type="number" name="wholePart" id="wholePart" placeholder="00" min="0" required autofocus>.
-		<input type="number" name="decimalPart" id="decimalPart" placeholder="00" min="0" max="99" required autofocus><br>
+		<input type="number" name="decimalPart" id="decimalPart" placeholder="00" min="0" max="99" 
+			onchange="if(this.value.length > 2) {this.value = this.value.charAt(0) + this.value.charAt(1);}; if(this.value.length == 1){this.value = this.value + '0'};" required autofocus><br>
 		<input type="hidden" value="<c:out value="${quotation.ID }"/>" name="quotationID" id="quotationID" />
 		<input type="submit" value="Submit">
 	</form>

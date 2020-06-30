@@ -40,8 +40,19 @@ public class PriceQuotation extends HttpServlet {
 			quotationID = Integer.parseInt(request.getParameter("quotationID"));
 			System.out.println(request.getParameter("wholePart"));
 			System.out.println(request.getParameter("decimalPart"));			
+			
 			wholePart = Integer.parseInt(request.getParameter("wholePart"));
-			decimalPart = Integer.parseInt(request.getParameter("decimalPart"));
+			
+			String toParse = request.getParameter("decimalPart");
+			if(toParse.length()>2) {
+				toParse = "" + toParse.charAt(0) + toParse.charAt(1);
+			}
+			
+			if(toParse.length()==1) {
+				toParse = toParse + "0";
+			}
+			System.out.println("Decimal part to parse is: " + toParse);
+			decimalPart = Integer.parseInt(toParse);
 		}
 		catch (NumberFormatException | NullPointerException e){
 			e.printStackTrace();

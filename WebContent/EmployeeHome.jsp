@@ -18,7 +18,8 @@
 				<c:forEach var="option" items="${managedQuotation.product.options}">
 					[<c:out value="${option.name}" />, <c:out value="${option.type}" />]
 				</c:forEach>
-				Price: <c:out value="${managedQuotation.price.wholePart}" />.<c:out value="${managedQuotation.price.decimalPart}" />
+				Price: <c:out value="${managedQuotation.price.wholePart}" />.
+					   <c:if test="${ managedQuotation.price.decimalPart <= 9 }">0</c:if><c:out value="${managedQuotation.price.decimalPart}" />
 				[image]
 			</li>
 		</c:forEach>
