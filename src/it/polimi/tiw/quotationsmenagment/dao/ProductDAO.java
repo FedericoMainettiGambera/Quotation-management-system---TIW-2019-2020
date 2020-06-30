@@ -97,4 +97,23 @@ private Connection connection;
 	
 		return availableOptions; //could be empty
 	}
+	
+	public byte[] findProductImage(int productID) throws SQLException {
+		//returned object
+		byte[] image = null;
+		
+		String query = "SELECT image FROM db_quotation_management.product WHERE ID = ?;";
+		// Query result structure:
+		// image
+		
+		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
+			pstatement.setInt(1, productID);
+			try (ResultSet result = pstatement.executeQuery();) {
+				if (result.next()) {
+					image = result.getBytes("image");
+				}
+			}
+		}
+		return image; //could be null
+	}
 }

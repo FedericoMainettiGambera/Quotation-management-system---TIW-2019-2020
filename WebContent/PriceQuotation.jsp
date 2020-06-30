@@ -6,6 +6,12 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Insert title here</title>
+<style>
+img {
+	max-width: 50px;
+	max-height: 50px;
+}
+</style>
 </head>
 <body>
 	<h2>Client Data:</h2>
@@ -20,7 +26,12 @@
 		<c:forEach var="option" items="${quotation.product.options}">
 			<li><c:out value="${option.name}" />, <c:out value="${option.type}" /></li>
 		</c:forEach>
-		<li>[image]</li>
+		<li>
+			<c:url value="/Image" var="imageURL">
+				<c:param name="productID" value="${quotation.product.ID}"/>
+			</c:url>
+			<img src="${imageURL}">
+		</li>
 	</ul>
 	<h2>Price the quotations (specify whole and decimal part):</h2>
 	<form action="/quotationMenagementTIW2019-2020/PriceQuotation/" method="post">

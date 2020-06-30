@@ -6,11 +6,17 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Insert title here</title>
+<style>
+img {
+	max-width: 50px;
+	max-height: 50px;
+}
+</style>
 </head>
 <body>
 	<h1>Welcome back! Your name is <c:out value="${user.username}" /></h1>
 	<a href="/quotationMenagementTIW2019-2020/GoToProductSelectionPage">Create a new quotation!</a>
-	<h2>List of previously managed quotations:</h2>
+	<h2>List of previous quotations:</h2>
 	<ul>
 		<c:forEach var="quotation" items="${quotations}">
 			<li> 
@@ -21,7 +27,10 @@
 				</c:forEach>
 				Price: <c:out value="${quotation.price.wholePart}" />.
 					   <c:if test="${ managedQuotation.price.decimalPart <= 9 }">0</c:if><c:out value="${quotation.price.decimalPart}" />
-				[image]
+				<c:url value="/Image" var="imageURL">
+					<c:param name="productID" value="${quotation.product.ID}"/>
+				</c:url>
+				<img src="${imageURL}">
 			</li>
 		</c:forEach>
 	</ul>

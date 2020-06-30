@@ -17,6 +17,11 @@ public class Product {
 		this.setImage(image);
 	}
 	
+	public Product(int ID, String name){
+		this.ID = ID;
+		this.setName(name);
+	}
+	
 	public Product(String name, byte[] image, ArrayList<Option> options){
 		this.setName(name);
 		this.setImage(image);

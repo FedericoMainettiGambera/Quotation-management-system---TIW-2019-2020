@@ -6,6 +6,12 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Insert title here</title>
+<style>
+img {
+	max-width: 50px;
+	max-height: 50px;
+}
+</style>
 </head>
 <body>
 	<h2>Please, select a product:</h2>
@@ -18,7 +24,11 @@
 				</c:url>
 				<a href="<c:out value = "${optionSelectionURL}"/>">
 					<c:out value="${product.name}"/>
-				</a> [image]
+				</a>
+				<c:url value="/Image" var="imageURL">
+					<c:param name="productID" value="${product.ID}"/>
+				</c:url>
+				<img src="${imageURL}">
 			</li>
 		</c:forEach>
 	</ul>

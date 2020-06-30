@@ -6,6 +6,12 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Insert title here</title>
+<style>
+img {
+	max-width: 50px;
+	max-height: 50px;
+}
+</style>
 </head>
 <body>
 	<h1>Welcome back! Your name is <c:out value="${user.username}" /></h1>
@@ -20,7 +26,10 @@
 				</c:forEach>
 				Price: <c:out value="${managedQuotation.price.wholePart}" />.
 					   <c:if test="${ managedQuotation.price.decimalPart <= 9 }">0</c:if><c:out value="${managedQuotation.price.decimalPart}" />
-				[image]
+				<c:url value="/Image" var="imageURL">
+					<c:param name="productID" value="${managedQuotation.product.ID}"/>
+				</c:url>
+				<img src="${imageURL}">
 			</li>
 		</c:forEach>
 	</ul>
@@ -37,7 +46,10 @@
 					<c:forEach var="option" items="${notManagedQuotation.product.options}">
 						[<c:out value="${option.name}" />, <c:out value="${option.type}" />]
 					</c:forEach>
-					. [image]
+					<c:url value="/Image" var="imageURL">
+						<c:param name="productID" value="${notManagedQuotation.product.ID}"/>
+					</c:url>
+					<img src="${imageURL}">
 				</a>
 			</li>
 		</c:forEach>
