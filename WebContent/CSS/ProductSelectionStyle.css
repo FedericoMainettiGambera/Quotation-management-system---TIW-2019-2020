@@ -242,6 +242,7 @@ img{
     flex-wrap: nowrap;
     justify-content: center;
     align-content: center;
+    border-left: 2px solid black;
 }
 .productName{
     width: 80%;

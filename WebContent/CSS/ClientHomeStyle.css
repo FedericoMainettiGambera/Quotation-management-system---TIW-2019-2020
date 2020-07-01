@@ -54,7 +54,6 @@ input[type=submit]:hover{
 
 .left{
     width: 65%;
-    border-right: 2px solid black;
 }
 .topMask{
     position:fixed;
@@ -184,83 +183,4 @@ input[type=submit]:hover{
 }
 .normalText{
 	display: none;
-}
-
-
-
-
-img{
-    max-width: 70%;
-    max-height: 70%;
-}
-
-.productsContainer{
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-evenly;
-    align-items: center;
-}
-.productContainer{
-    width: 20%;
-    padding: 5vh 3vw;
-    border: 0px solid black;
-    transition: 0.2s;
-}
-.productContainer:hover{
-    border: 5px solid black;
-}
-.productContainer:hover .productInfoContainer{
-    opacity: 1;
-    background-color: #ffffff;
-}
-.productInfoContainer{
-    opacity: 0;
-    position: fixed;
-    right: 0;
-    top: 10%;
-    bottom:10%;
-    left:65%;
-    transition: 0.2s;
-}
-.chooseForm{
-    opacity: 0;
-    transition: 0.2s;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding-top: 0%;
-}
-.productContainer:hover .chooseForm{
-    opacity:100;
-    padding-top: 3vh;
-}
-.productInfoFlex{
-    height: 100%;
-    display: flex;
-    flex-flow: column;
-    flex-wrap: nowrap;
-    justify-content: center;
-    align-content: center;
-}
-.productName{
-    width: 80%;
-    margin: 0 auto 7vh auto;
-    text-align: center;
-}
-.noHoveredContainer{
-    position: fixed;
-    right: 0;
-    top: 10%;
-    bottom:10%;
-    left:65%;
-    border-left: 2px solid black;
-}
-.noHoveredFlex{
-    height: 100%;
-    display: flex;
-    flex-flow: column;
-    flex-wrap: nowrap;
-    justify-content: center;
-    align-content: center;
 }

@@ -29,7 +29,6 @@
                                 <span class="LogInFrase">Log in to start your journey</span>
                         </div>
                 </div>
-                <div class="bar"></div>
                 <div class="flexCenterContainer container1 rightSection">
                         
                         <div class="flexCenterContainer container1_3"> <!-- LogIn form -->
