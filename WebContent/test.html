@@ -3,16 +3,54 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Insert title here</title>
+<link rel="stylesheet" type="text/css" href="CSS/normalize.css">
+<link rel="stylesheet" type="text/css" href="CSS/test.css">
+<link href="https://fonts.googleapis.com/css2?family=Palanquin+Dark:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
 </head>
 <body>
-        <h1>Welcome back [deffemttg]</h1>
-        <h2>List of previously managed quotations:</h2>
-        <ul>
-                <li>[clientusername]. [product.name] whith multiple [product.options.name] and [product.option.name.type]. price: [10000]. [Image]</li>
-        </ul>
-        <h2>List of quotations to be managed:</h2>
-        <ul>
-                <li><a href="">[clientusername]. [product.name] whith multiple [product.options.name] and [product.option.name.type]. [Image]</a></li>
-        </ul>
+        <div class="container">
+                <div class="flexCenterContainer container1 leftSection">
+                        <div class="flexCenterContainer container1_1"> <!-- THUNDER WEBSITE title -->
+                                <div class="flexCenterContainer container1_1_1">
+                                        <div class="flexCenterContainer flexLeftTitle"> <span class="THUNDER">COOL COMPANY NAME</span></div>
+                                </div>
+                        </div>
+                        <div class="flexCenterContainer">
+                                <div class="flexCenterContainer loremContainer">
+                                        <span>
+                                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur tempora, atque pariatur minima tenetur reprehenderit, commodi porro delectus incidunt quidem quae assumenda culpa quod, praesentium eius asperiores beatae dolor. Ipsam mollitia iste quasi, sed enim, non adipisci repellendus quo, consectetur aliquid voluptates rerum assumenda repellat. Consectetur, repellendus saepe facilis cumque praesentium corrupti quidem molestiae explicabo. Aperiam quasi quibusdam libero recusandae.
+                                        </span>
+                                </div>
+                        </div>
+                        <div class="flexCenterContainer container1_2"> <!-- LogIn to start your journey -->
+                                <span class="LogInFrase">Log in to start your journey</span>
+                        </div>
+                </div>
+                <div class="bar"></div>
+                <div class="flexCenterContainer container1 rightSection">
+                        
+                        <div class="flexCenterContainer container1_3"> <!-- LogIn form -->
+                                <form class="flexCenterContainer container1_3_1" action="/quotationMenagementTIW2019-2020/CheckLogin/" method="post">
+                                        <div>
+                                                <span class="LogInLabel">LOG IN:</span>
+                                        </div>
+                                        <div class="textInputContainer flexCenterContainer">
+                                                <label class="noDisplay" for="username">Username</label><br> 
+                                                <input class="autoDimension" type="text" name="username" id="username" 
+                                                        placeholder="username" required autofocus autocomplete><br>
+                                        </div>
+                                        <div class="textInputContainer flexCenterContainer">
+                                                <label class="noDisplay" for="password">Password</label><br>
+                                                <input class="autoDimension" type="password" name="password" id="password" 
+                                                        placeholder="password" required autocomplete><br> 
+                                        </div>
+                                        <div class="submitContainer flexCenterContainer">
+                                                <input class="autoDimension" type="submit" value="Login">
+                                        </div>
+                                </form>
+                        </div>
+                </div> 
+        </div>   
 </body>
 </html>

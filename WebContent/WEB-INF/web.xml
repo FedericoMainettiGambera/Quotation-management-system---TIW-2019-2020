@@ -24,7 +24,21 @@
     </filter>
     <filter-mapping>
         <filter-name>LoginChecker</filter-name>
-        <url-pattern>/*</url-pattern>
+        <url-pattern>/</url-pattern>
+		<url-pattern>/CreateQuotation</url-pattern>
+        <url-pattern>/GoToClientHomePage</url-pattern>
+        <url-pattern>/GoToOptionSelectionPage</url-pattern>
+        <url-pattern>/GoToProductSelectionPage</url-pattern>
+        <url-pattern>/ClientHome.jsp</url-pattern>
+        <url-pattern>/OptionSelection.jsp</url-pattern>
+        <url-pattern>/ProductSelection.jsp</url-pattern>
+		<url-pattern>/GoToEmployeeHomePage</url-pattern>
+        <url-pattern>/GoToPriceQuotationPage</url-pattern>
+        <url-pattern>/PriceQuotation</url-pattern>
+        <url-pattern>/EmployeeHome.jsp</url-pattern>
+        <url-pattern>/PriceQuotation.jsp</url-pattern>
+		<url-pattern>/LoginPage.jsp</url-pattern>
+		<url-pattern>/Image</url-pattern>
     </filter-mapping>
 	
 	<filter>
@@ -61,7 +75,7 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>LoginPage</servlet-name>
-		<url-pattern>/</url-pattern>
+		<url-pattern>/LogIn</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
@@ -90,15 +104,15 @@
 		<servlet-name>CreateQuotation</servlet-name>
 		<url-pattern>/CreateQuotation/*</url-pattern>
 	</servlet-mapping>
-
+	
 	<welcome-file-list>
 		<welcome-file>LoginPage.jsp</welcome-file>
 	</welcome-file-list>
 	
 	<!-- TODO
-		<error-page>
-	        <error-code>500</error-code>
-	        <location>TODO</location>
-	    </error-page>
+	<error-page>
+	    <error-code>500</error-code>
+	    <location>TODO</location>
+    </error-page>
     -->
 </web-app>
