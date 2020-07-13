@@ -37,9 +37,7 @@ public class PriceQuotation extends HttpServlet {
 		Integer decimalPart;
 		Integer quotationID;
 		try {
-			quotationID = Integer.parseInt(request.getParameter("quotationID"));
-			System.out.println(request.getParameter("wholePart"));
-			System.out.println(request.getParameter("decimalPart"));			
+			quotationID = Integer.parseInt(request.getParameter("quotationID"));			
 			
 			wholePart = Integer.parseInt(request.getParameter("wholePart"));
 			
@@ -47,11 +45,9 @@ public class PriceQuotation extends HttpServlet {
 			if(toParse.length()>2) {
 				toParse = "" + toParse.charAt(0) + toParse.charAt(1);
 			}
-			
 			if(toParse.length()==1) {
 				toParse = toParse + "0";
 			}
-			System.out.println("Decimal part to parse is: " + toParse);
 			decimalPart = Integer.parseInt(toParse);
 		}
 		catch (NumberFormatException | NullPointerException e){
@@ -59,17 +55,16 @@ public class PriceQuotation extends HttpServlet {
 			response.sendError(505, "Invalid parameters");
 			return;
 		}
+		
 		if(decimalPart >= 100 || decimalPart < 0 ) {
 			response.sendError(505, "Invalid parameters");
 			return;
 		}
 		
 		Money price = new Money(wholePart,decimalPart);
-		System.out.println("Parameter price (wholePart.decimalPart) is " + price.toString() + " and parameter quotationID is " + quotationID);
 		
 		QuotationDAO quotationDAO = new QuotationDAO(connection);
 		Quotation quotation = null;
-		System.out.println("Retriving data from DB.");
 		try {
 			quotation = quotationDAO.findByID(quotationID);
 		} catch (SQLException e1) {
@@ -77,21 +72,18 @@ public class PriceQuotation extends HttpServlet {
 			response.sendError(505, "Internal server Error");
 			return;
 		}
-		if(quotation == null || quotation.getPrice() != null) {
-			//TODO maybe should redirect to the priceQuotationPage... or to the home.. or to a special error page that leads to the home
+		if(quotation == null || quotation.getPrice() != null) { //checking if quotations exists and is not already priced
+			//TODO maybe should redirect to the priceQuotationPage... or to the home..
 			response.sendError(505, "Incorrect parameters");
 			return;
 		}
 		try {
-			System.out.println("Setting price " + price.toString() + " for quotation: \n" + quotation.toString() );
 			quotationDAO.priceQuotation(quotationID, price, ((User)request.getSession().getAttribute("user")).getID());
 		} catch (SQLException e) {
 			e.printStackTrace();
 			response.sendError(505, "Internal server Error");
 			return;
 		}
-		
-		System.out.println("Redirecting to GoToEmployeeHomePage");
 		
 		String path = "/quotationMenagementTIW2019-2020/GoToEmployeeHomePage"; //TODO should move project root to Tomcat root
 		response.sendRedirect(path);

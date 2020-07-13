@@ -324,13 +324,17 @@ public class QuotationDAO {
 		//start transaction for database integrity
 		connection.setAutoCommit(false);
 				
-		String query = "UPDATE db_quotation_management.quotation SET wholePart = ?, decimalPart = ? WHERE (ID = ?);";
+		String query = "UPDATE db_quotation_management.quotation SET wholePart = ?, decimalPart = ? WHERE (ID = ? and decimalPart IS NULL);";
 		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
 			pstatement.setInt(1, price.getWholePart());
 			pstatement.setInt(2, price.getDecimalPart());
 			pstatement.setInt(3, quotationID);
-			pstatement.executeUpdate();
-			
+			int matchedRows = pstatement.executeUpdate();
+			if(matchedRows == 0){
+				//quotation has already been priced, so you can't reprice it.
+				throw new SQLException("quotation has already been priced");
+			}
+
 			query = "INSERT into db_quotation_management.management (employeeID, quotationID) VALUES (?, ?);";
 			try (PreparedStatement pstatement1 = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);) {
 				pstatement1.setInt(1, employeeID);

@@ -39,7 +39,6 @@ public class ImageGetter extends HttpServlet {
 			response.sendError(505, "Invalid parameters");
 			return;
 		}
-		System.out.println("Parameter productID is: " + productID);
 		
 		ProductDAO productDAO = new ProductDAO(connection);
 		byte[] content = null;
@@ -56,6 +55,7 @@ public class ImageGetter extends HttpServlet {
 			response.sendError(505, "Internal server error");
 			return;
 		}
+		
 		response.setContentType("image/jpeg");
         response.setContentLength(content.length);
         response.getOutputStream().write(content);

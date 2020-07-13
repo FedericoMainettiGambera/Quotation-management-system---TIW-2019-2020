@@ -22,24 +22,24 @@ public class LoginChecker implements Filter {
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) res;
 		
-		System.out.println("Servlet path is " + request.getServletPath());
+		//System.out.println("Servlet path is " + request.getServletPath());
 		HttpSession session = request.getSession(true);
 		if(session.isNew() || session.getAttribute("user") == null) {
-			System.out.println("User has no active session or hasn't logged in.");
+			//System.out.println("User has no active session or hasn't logged in.");
 			if(request.getServletPath().contains("LoginPage.jsp")) {
-				System.out.println("User is trying to access log in page: access granted.");
+				//System.out.println("User is trying to access log in page: access granted.");
 				chain.doFilter(req, res);
 				return;
 			}
 			else {
 				if(request.getServletPath().contains("CheckLogin")) {
-					System.out.println("User is trying to log in using servlet CheckLogin: acces granted");
+					//System.out.println("User is trying to log in using servlet CheckLogin: acces granted");
 					chain.doFilter(req, res);
 					return;
 				}
 				else {
-					System.out.println("User is trying to access something different from log in page or CheckLogin servlet: access denied.");
-					System.out.println("forwarding to LoginPage.jsp.");
+					//System.out.println("User is trying to access something different from log in page or CheckLogin servlet: access denied.");
+					//System.out.println("forwarding to LoginPage.jsp.");
 					String path = "/quotationMenagementTIW2019-2020/"; //TODO should move project root to Tomcat root
 					response.sendRedirect(path);
 					return;
@@ -47,25 +47,25 @@ public class LoginChecker implements Filter {
 			}
 		}
 		else { //user already logged in
-			System.out.println("User has an active session and is logged in.");
-			System.out.println("Checking if user is trying to log in twice.");
+			//System.out.println("User has an active session and is logged in.");
+			//System.out.println("Checking if user is trying to log in twice.");
 			if(request.getServletPath().contains("/LoginPage.jsp") || request.getServletPath().contains("/CheckLogin")) {
-				System.out.println("User is trying to acces LoginPage and has an active session: " + ((User)session.getAttribute("user")).toString());
+				//System.out.println("User is trying to access LoginPage and has an active session: " + ((User)session.getAttribute("user")).toString());
 				if (((User)session.getAttribute("user")).isClient()) { //checking role
-					System.out.println("User is a client, redirecting to GoToClientHomePage");
+					//System.out.println("User is a client, redirecting to GoToClientHomePage");
 					String path = "/quotationMenagementTIW2019-2020/GoToClientHomePage"; //TODO should move project root to Tomcat root
 					response.sendRedirect(path);
 					return;
 				}
 				else {
-					System.out.println("User is an employee, redirecting to GoToEmployeeHomePage");
-					String path = "/quotationMenagementTIW2019-2020/GoToEmployeeHomePage"; //TODO should move project root to Tomcat root
+					//System.out.println("User is an employee, redirecting to GoToEmployeeHomePage");
+					String path = "/quotationMenagementTIW2019-2020/LoginPage.jsp"; //TODO should move project root to Tomcat root
 					response.sendRedirect(path);
 					return;
 				}
 			}
 			else {
-				System.out.println("User is not trying to log in twice.");
+				//System.out.println("User is not trying to log in twice.");
 				chain.doFilter(req, res);
 				return;
 			}

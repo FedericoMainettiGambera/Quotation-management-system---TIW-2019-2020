@@ -34,26 +34,22 @@ public class GoToOptionSelectionPage extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("GoToOptionSelectionPage.doGet() just started.");
 		
-		
 		Integer productSelectedID = null;
+		String productSelectedName = null;
 		try {
 			productSelectedID = Integer.parseInt(request.getParameter("productSelected"));
+			productSelectedName = StringEscapeUtils.escapeJava(request.getParameter("productSelectedName"));
 		} catch (NumberFormatException | NullPointerException e) {
 			e.printStackTrace();
 			response.sendError(505, "Invalid parameters");
 			return;
 		}
-		System.out.println("Parameter productSelectedID is: " + productSelectedID);
 		
-		String productSelectedName = StringEscapeUtils.escapeJava(request.getParameter("productSelectedName"));
 		if(productSelectedName == null || productSelectedName.isEmpty()) {
-			System.out.println("Invalid or missing parameter \"productSelectedName\"");
 			response.sendError(505, "Invalid parameters");
 			return;
 		}
-		System.out.println("Parameter productSelectedName is: " + productSelectedName);
 		
-		System.out.println("Retriving data fom DB.");
 		ProductDAO productDAO = new ProductDAO(connection);
 		ArrayList<Option> options = null;
 		try {
@@ -63,21 +59,16 @@ public class GoToOptionSelectionPage extends HttpServlet {
 			response.sendError(505, "Internal server error");
 			return;
 		}
-		System.out.println("Options available are:");
+		
 		if(options.isEmpty()) {
-			System.out.println("  There are no options available");
+			response.sendError(505, "Invalid parameters");
+			return;
 		}
-		else {
-			for(int i = 0; i< options.size(); i++) {
-				System.out.println("  " + options.get(i).toString());
-			}
-		}
-		System.out.println("Adding options, productSelectedID and productSelectedName to request.");
+		
 		request.setAttribute("options", options);
 		request.setAttribute("productSelectedName", productSelectedName);
 		request.setAttribute("productSelectedID", productSelectedID);
 		
-		System.out.println("Forwarding to OptionSelection.jsp");
 		String path = "/OptionSelection.jsp";
 		RequestDispatcher dispatcher = request.getRequestDispatcher(path);
 		dispatcher.forward(request, response);

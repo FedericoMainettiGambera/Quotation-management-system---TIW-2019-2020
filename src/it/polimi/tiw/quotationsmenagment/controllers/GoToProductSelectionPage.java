@@ -32,7 +32,6 @@ public class GoToProductSelectionPage extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("GoToProductSelectionPage.doGet() just started.");
 		
-		System.out.println("Retriving data from DB.");
 		ProductDAO productDAO = new ProductDAO(connection);
 		ArrayList<Product> products = null;
 		try {
@@ -43,20 +42,8 @@ public class GoToProductSelectionPage extends HttpServlet {
 			return;
 		}
 		
-		if(!products.isEmpty()) {
-			System.out.println("Products:");
-			for(int i = 0; i< products.size(); i++) {
-				System.out.println(products.get(i).toString());
-			}
-		}
-		else {
-			System.out.println("Products: EMPTY");
-		}
-		
-		System.out.println("Setting products in request.");
 		request.setAttribute("products", products);
 		
-		System.out.println("Forwarding to ProductSelection.jsp");
 		String path = "/ProductSelection.jsp";
 		RequestDispatcher dispatcher = request.getRequestDispatcher(path);
 		dispatcher.forward(request, response);

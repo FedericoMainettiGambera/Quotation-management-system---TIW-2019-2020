@@ -12,7 +12,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import it.polimi.tiw.quotationsmenagment.beans.Option;
 import it.polimi.tiw.quotationsmenagment.beans.User;
+import it.polimi.tiw.quotationsmenagment.dao.ProductDAO;
 import it.polimi.tiw.quotationsmenagment.dao.QuotationDAO;
 import it.polimi.tiw.quotationsmenagment.utils.ConnectionHandler;
 
@@ -41,9 +43,23 @@ public class CreateQuotation extends HttpServlet {
 			return;
 		}
 		
+		//extracting available options for the product
+		ProductDAO productDAO = new ProductDAO(connection);
+		ArrayList<Option> availableOptions= null;
+		try {
+			availableOptions = productDAO.findAvailableOptionsForProduct(productSelectedID);
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.getWriter().println("Invalid parameters");
+			return;
+		}
+		ArrayList<Integer> availableOptionsID = new ArrayList<Integer>();
+		for(int i = 0; i< availableOptions.size(); i++) {
+			availableOptionsID.add(availableOptions.get(i).getID());
+		}
+		
 		Map<String, String[]> parametersMap = request.getParameterMap();
-		System.out.println("All parameters names are:");
-		parametersMap.forEach((key,value) -> System.out.println("  " + key + ": [array lenght =" + value.length + "] first element is " + value[0])); 
 		
 		ArrayList<Integer> optionsID = new ArrayList<Integer>();
 		
@@ -52,6 +68,11 @@ public class CreateQuotation extends HttpServlet {
 		    	Integer currentOptionSelectedID = null;
 				try {
 					currentOptionSelectedID = Integer.parseInt(entry.getValue()[0]);
+					//checking if option is one of the available
+					if(!availableOptionsID.contains(currentOptionSelectedID)) {
+						response.sendError(505, "Invalid parameters");
+						return;
+					}
 				} catch (NumberFormatException | NullPointerException e) {
 					e.printStackTrace();
 					response.sendError(505, "Invalid parameters");
@@ -61,7 +82,11 @@ public class CreateQuotation extends HttpServlet {
 		    }
 		}
 		
-		System.out.println("Inserting new quotation in DB.");
+		if(optionsID.isEmpty()) {
+			response.sendError(505, "Quotation must have at least one option");
+			return;
+		}
+		
 		QuotationDAO quotationDAO = new QuotationDAO(connection);
 		try {
 			quotationDAO.createQuotation(productSelectedID, ((User)request.getSession().getAttribute("user")).getID(), optionsID);
@@ -71,8 +96,7 @@ public class CreateQuotation extends HttpServlet {
 			return;
 		}
 		
-		System.out.println("Redirecting to GoToClientHomePage");
-		String path = "/quotationMenagementTIW2019-2020/GoToClientHomePage"; //TODO should move project root to Tomcat root
+		String path = "/quotationMenagementTIW2019-2020/GoToClientHomePage"; 
 		response.sendRedirect(path);
 	}
 

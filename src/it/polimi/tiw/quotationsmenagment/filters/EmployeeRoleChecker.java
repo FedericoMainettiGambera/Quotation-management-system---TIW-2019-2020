@@ -21,16 +21,11 @@ public class EmployeeRoleChecker implements Filter {
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) res;
 		
-		System.out.println("ServletPath is " + request.getServletPath());
-		
 		if(!((User)request.getSession().getAttribute("user")).isClient()) {
-			System.out.println("User is an employee: acces granted.");
 			chain.doFilter(req, res);
 			return;
 		}
 		else {
-			System.out.println("User is not an employee: acces denied.");
-			System.out.println("Redirecting to ClientHomePage");
 			String path = "/quotationMenagementTIW2019-2020/GoToClientHomePage"; //TODO should move project root to Tomcat root
 			response.sendRedirect(path);
 			return;

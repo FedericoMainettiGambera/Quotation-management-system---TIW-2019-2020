@@ -33,30 +33,17 @@ public class GoToClientHomePage extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("GoToClientHomePage.doGet() just started");
 		
-		System.out.println("Retriving data from DB.");
 		QuotationDAO quotationDAO = new QuotationDAO(connection);
 		ArrayList<Quotation> clientQuotations = null;
 		try {
 			clientQuotations = quotationDAO.findAllByClientID(((User)request.getSession().getAttribute("user")).getID());
-		} catch (SQLException e) {
+		} catch (SQLException | NullPointerException e) {
 			e.printStackTrace();
 			response.sendError(505, "Internal server error");
 			return;
 		}
-
-		if(!clientQuotations.isEmpty()) {
-			System.out.println("clientQuotations:");
-			for(int i = 0; i < clientQuotations.size(); i++) {
-					System.out.println(clientQuotations.get(i).toString());
-				}
-		}
-		else {
-			System.out.println("clientQuotations: EMPTY");
-		}
 		
 		request.setAttribute("quotations", clientQuotations);
-		
-		System.out.println("Data setted in request and Forwarding to ClientHome.jsp");
 		
 		String path = "/ClientHome.jsp";
 		RequestDispatcher dispatcher = request.getRequestDispatcher(path);

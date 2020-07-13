@@ -32,12 +32,12 @@ public class GoToEmployeeHomePage extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("GoToEmployeeHomePage.doGet() just started.");
-		System.out.println("Retriving data from DB.");
+		
 		QuotationDAO quotationDAO = new QuotationDAO(connection);
 		ArrayList<Quotation> employeeQuotations = null;
 		try {
 			employeeQuotations = quotationDAO.findAllByEmplyeeID(((User)request.getSession().getAttribute("user")).getID());
-		} catch (SQLException e) {
+		} catch (SQLException | NullPointerException e) {
 			e.printStackTrace();
 			response.sendError(505, "Internal server error");
 			return;
@@ -52,28 +52,6 @@ public class GoToEmployeeHomePage extends HttpServlet {
 			return;
 		}		
 		request.setAttribute("notManagedQuotations", notManagedQuotations);
-		
-		System.out.println("Stored data in request:");
-		if(!employeeQuotations.isEmpty()) {
-			System.out.println("1) employeeQuotations:");
-			for(int i = 0; i< employeeQuotations.size(); i++) {
-				System.out.println(employeeQuotations.get(i).toString());
-			}
-		}
-		else {
-			System.out.println("1) employeeQuotations: EMPTY");
-		}
-		if(!notManagedQuotations.isEmpty()) {
-			System.out.println("2) notManagedQuotations:");
-			for(int i = 0; i< notManagedQuotations.size(); i++) {
-				System.out.println(notManagedQuotations.get(i).toString());
-			}
-		}
-		else {
-			System.out.println("2) notManagedQuotations: EMPTY");
-		}
-		
-		System.out.println("Forwarding to EmployeeHome.jsp");
 		
 		String path = "/EmployeeHome.jsp";
 		RequestDispatcher dispatcher = request.getRequestDispatcher(path);

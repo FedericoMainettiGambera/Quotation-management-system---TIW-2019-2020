@@ -38,7 +38,7 @@ public class GoToPriceQuotationPage extends HttpServlet {
 			response.sendError(505, "Invalid parameter");
 			return;
 		}
-		System.out.println("Request's parameter \"quotationID\" is: " + quotationID + ", searching quotation in DB.");
+		
 		QuotationDAO quotationDAO = new QuotationDAO(connection);
 		Quotation quotationBean = null;
 		try {
@@ -48,14 +48,14 @@ public class GoToPriceQuotationPage extends HttpServlet {
 			response.sendError(505, "Internal Server Error");
 			return;
 		}
+		
 		if(quotationBean == null || quotationBean.getPrice() != null) {
 			response.sendError(505, "Invalid parameter");
 			return;
 		}
-		request.setAttribute("quotation", quotationBean);
-		System.out.println("Quotation found and atached to the request.\n" + quotationBean.toString());
 		
-		System.out.println("Forwarding to PriceQuotation.jsp");
+		request.setAttribute("quotation", quotationBean);
+		
 		String path = "/PriceQuotation.jsp";
 		RequestDispatcher dispatcher = request.getRequestDispatcher(path);
 		dispatcher.forward(request, response);

@@ -21,16 +21,11 @@ public class ClientRoleChecker implements Filter {
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) res;
 		
-		System.out.println("ServletPath is " + request.getServletPath());
-		
 		if(((User)request.getSession().getAttribute("user")).isClient()) {
-			System.out.println("User is a client: acces granted.");
 			chain.doFilter(req, res);
 			return;
 		}
 		else {
-			System.out.println("User is not a client: acces denied.");
-			System.out.println("Redirecting to EmployeeHomePage");
 			String path = "/quotationMenagementTIW2019-2020/GoToEmployeeHomePage"; //TODO should move project root to Tomcat root
 			response.sendRedirect(path);
 			return;
