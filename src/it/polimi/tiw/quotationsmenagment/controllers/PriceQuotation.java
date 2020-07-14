@@ -56,7 +56,7 @@ public class PriceQuotation extends HttpServlet {
 			return;
 		}
 		
-		if(decimalPart >= 100 || decimalPart < 0 ) {
+		if(decimalPart >= 100 || decimalPart < 0 ||wholePart <= 0) {
 			response.sendError(505, "Invalid parameters");
 			return;
 		}
